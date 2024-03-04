@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+        <title>
+            Room Rental System
+            {% block title %}
+            {% endblock %}
+        </title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href=" {% static 'css/bootstrap.css' %} ">
+        <link rel="icon" href="{% static 'assets/logo1.png' %}" type="image/jpg">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        {% block style %}
+        {% endblock %}
+        {% endblock %}
+    </head>
+    <style>
+        .navbar-nav a {
+            color: black !important;
+        }
+    </style>
+    <body>
+        {%block nav%}
+        <div class="container-fluid bg-primary">
+        <nav class="navbar navbar-expand-lg navbar-light bg-primary mx-5">
+            <a href="/">
+                <img src="{% static '/assets/logo1.png' %}" style="width: 2.5em;">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button> 
+            <div class="collapse navbar-collapse" id="navbarSupportedContent" style="margin-left: 2em;">
+                <ul class="navbar-nav mr-auto mx-5">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/index/">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url "recommended" %}">Recommended</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home/">Explore</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about/">About us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact/">Contact us</a>
+                    </li>
+                </ul>
+                {%endblock%}
+                {% block button %}
+                {% if request.user.is_authenticated %}
+                <a class="btn btn-outline-success navbar-profile-btn" href="/profile" style="color: white;"><strong>Profile</strong></a>
+                <a class="btn btn-danger navbar-logout-btn" href="{% url "logout" %}" style="margin-left: 1em;"><strong>Logout</strong></a>
+                {% else %}
+                <a class="btn btn-outline-success navbar-login-btn-sm" href="/login" style="color: white;"><strong>Login</strong></a>
+                <a class="btn btn-success navbar-signup-btn-sm" href="/register" style="margin-left: 1em;"><strong>Sign Up</strong></a>
+                {% endif %}
+                {% endblock %}
+            </div>
+        </nav>
+    </div>
+        <div id="id01" class="modal">
+        </div>
+        {%block body%}
+        {%endblock%}
+        
+        {%block footer%}
+        <footer class="col-md-12 col-sm-12 bg-primary">
+            <div class="text-center">Copyright © 2023 || Designed By Our team || </div>
+            <div class="w3-panel w3-large" style="margin: 0; text-align: center;">
+                <i class="fa fa-facebook-official w3-hover-opacity"></i>
+                <i class="fa fa-instagram w3-hover-opacity"></i>
+                <i class="fa fa-snapchat w3-hover-opacity"></i>
+                <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+                <i class="fa fa-twitter w3-hover-opacity"></i>
+                <i class="fa fa-linkedin w3-hover-opacity"></i>
+            </div>
+        </footer>
+        {%endblock%}
+
+        <script>
+            // Get the modal
+            var modal = document.getElementById('id01');
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+            nav_items = document.getElementsByClassName("nav-item");
+
+            for(var index=0; index< nav_items.length; index++){
+                nav_items[index].classList.remove("active");
+            }
+
+            for(var index=0; index< nav_items.length; index++){
+                if(nav_items[index].children[0].pathname==window.location.pathname){
+                    nav_items[index].classList.add("active");
+                }
+            }
+
+        </script>
+
+        <script src=" {% static 'js/jquery.js' %} "></script>
+        <script src=" {% static 'js/popper.js' %} "></script>
+        <script src=" {% static 'js/bootstrap.js' %} "></script>
+
+        <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+        {% block script %}
+        {% endblock %}
+    </div>
+</div>
+    </body>
+</html>

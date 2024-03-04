@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+<style>
+    .w3-home-container {
+        margin-top:1%; 
+        margin-left: 5%; 
+        margin-right: 5%; 
+        margin-bottom: 1%;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .w3-home-container {
+            margin: 0!important;
+            padding: 0!important;
+        }
+    }
+</style>
+{% endblock %}
+{%block body%}
+<div>
+
+<div class="w3-container w3-home-container">
+    {% if room %}
+    <h5 class="my-4" style="text-align: center;"> Explore Apartments</h5>
+    <div class="w3-row-padding">
+        <div class="col carousel slide my-3" data-ride="carousel">
+            <div class="carousel-inner no-padding">
+                <div class="carousel-item active">
+                    {% for i in room%}
+                    <div class="w3-third w3-container w3-margin-bottom">
+                        <div class="card" style=" background-color: #e9ecef;">
+                            <img src='{{i.img.url}}' class="w3-hover-opacity" style="height: 250px; width: 100%" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <span id="pricepr{{i.id}}">
+                                        <p>
+                                            <b>
+                                        <h3>RS {{i.cost}}</h3> </b></p>
+                                    </span>
+                                </h5>
+                                <p class="card-text">{{i.desc|slice:"0:20"}}...</p>
+                                <p>{{i.district}}, {{i.city}}, {{i.state}}</p>
+                                <p><b>Booking Status: {% if i.booked == True %}Booked {% else %}Not Booked {% endif %}</b></p>
+                                <form action="/descr"  style="margin-bottom: 5px;">
+                                    <button name="id" value="{{i.room_id}}" style="background-color: grey"> Quick view</button>
+                                </form>
+                                <!-- <a href="descr/{{i.room_id}}">
+                                    <button style="background-color: grey"> Quick view</button>
+                                </a> -->
+                            </div>
+                        </div>
+                    </div>
+                    {% if forloop.counter|divisibleby:3 and forloop.counter > 0 and forloop.counter < room.2 %}
+                </div>
+                <div class="carousel-item">
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+
+            {% comment %} Paginator for room {% endcomment %}
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+              {% if room.has_previous %}
+                <li class="page-item">
+                  <a class="page-link text-dark font-weight-bold" href="?rooms_page={{ room.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+              {% endif %}
+              {% for num in room.paginator.page_range %}
+                <li class="page-item {% if room.number == num %}active{% endif %}">
+                  <a class="page-link text-dark font-weight-bold" href="?rooms_page={{ num }}">{{ num }}</a>
+                </li>
+              {% endfor %}
+              {% if room.has_next %}
+                <li class="page-item">
+                  <a class="page-link text-dark font-weight-bold" href="?rooms_page={{ room.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
+          
+
+
+    </div>
+    {% endif %}
+    {% if house %}
+    <h5 class="my-4" style="text-align: center;"> Houses - Recommended for You.</h5>
+    <div class="w3-row-padding">
+        <div class="col carousel slide my-3" data-ride="carousel">
+            <div class="carousel-inner no-padding">
+                <div class="carousel-item active">
+                    {% for i in house %}
+                    <div class="w3-third w3-container w3-margin-bottom">
+                        <div class="card" style=" background-color: #e9ecef;">
+                            <img src='{{i.img.url}}' class="w3-hover-opacity" style="height: 250px; width: 100%" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <span id="pricepr{{i.id}}">
+                                        <p>
+                                            <b>
+                                        <h3>RS {{i.cost}}</h3> </b></p>
+                                    </span>
+                                </h5>
+                                <p class="card-text">{{i.desc|slice:"0:20"}}...</p>
+                                <p>{{i.district}}, {{i.city}}, {{i.state}}</p>
+                                <p><b>Booking Status: {% if i.booked == True %}Booked {% else %}Not Booked {% endif %}</b></p>
+                                <form action="/descr"  style="margin-bottom: 5px;">
+                                    <button name="id" value="{{i.house_id}}" style="background-color: grey"> Quick view</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% if forloop.counter|divisibleby:3 and forloop.counter > 0 and forloop.counter < house.2 %}
+                </div>
+                <div class="carousel-item">
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        {% comment %} Paginator for house {% endcomment %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+              {% if house.has_previous %}
+                <li class="page-item">
+                  <a class="page-link text-dark font-weight-bold" href="?houses_page={{ house.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+              {% endif %}
+              {% for num in house.paginator.page_range %}
+                <li class="page-item {% if house.number == num %}active{% endif %}">
+                  <a class="page-link text-dark font-weight-bold" href="?houses_page={{ num }}">{{ num }}</a>
+                </li>
+              {% endfor %}
+              {% if house.has_next %}
+                <li class="page-item">
+                  <a class="page-link text-dark font-weight-bold" href="?rooms_page={{ house.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
+
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

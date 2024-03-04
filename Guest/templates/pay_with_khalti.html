@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block body %}
+<form style='margin:100px auto 100px auto' action="{% url "initiate" %}" method="post" class='text-center'>
+    {% csrf_token %}
+    <input type="hidden" name="purchase_order_id" value='{{uid}}'>
+    <input type="hidden" name="amount" value='1000'>
+    {% if house_id %}
+    <input type="hidden" name="house_id" value='{{house_id}}'>
+    {% elif room_id %}
+    <input type="hidden" name="room_id" value='{{room_id}}'>
+    {% endif %}
+    <input type="hidden" name="return_url", value='http://localhost:8000/verify'>
+    <input type="submit" value="Pay With Khalti" class='btn btn-danger text-center'>
+</form>
+{% endblock body %}

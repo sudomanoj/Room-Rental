@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Notification</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        /* Styling for email content */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, p {
+            margin: 0 0 20px;
+        }
+        ul {
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; color: #dc3545;">Booking Notification</h1>
+        <p>Dear Landlord {% if booking.house %}{{booking.house.user_email.email}}{% else %}{{booking.room.user_email.email}}{% endif %} ,</p>
+        <p>This is to inform you that {% if booking.house %}house{% else %}room{% endif %} has been booked.</p>
+        <p><strong>Booking details:</strong></p>
+        <ul>
+            <li><strong>Customer's Name:</strong> {{ booking.customer.name }}</li>
+            <li><strong>Customer's Email:</strong> {{ booking.customer.email }}</li>
+            <li><strong>Customer's City:</strong> {{ booking.customer.city }}</li>
+            <li><strong>Customer's Phone:</strong> {{ booking.customer.phone }}</li>
+            <li><strong>Date:</strong> {{ booking.date }}</li>
+        </ul>
+        <p>Thank you!</p>
+        <p style="text-align: center;"><a href="{{ request.scheme }}://{{ request.get_host }}{% url "profile" %}" class="btn">View Details</a></p>
+    </div>
+</body>
+</html>

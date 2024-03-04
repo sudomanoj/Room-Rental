@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block style %}
+<style>
+    p {
+        margin: 0.5rem 0!important;
+    }
+
+    @media only screen and (max-width: 600px) {
+        form {
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}
+</style>
+{% block body %} 
+<div class="w3-container w3-padding-large" style="margin-right: 5%; margin-left: 5%; margin-bottom: 1%; margin-top: 1%;">
+    {%if msg%}
+    <div class="alert alert-info" role="alert">
+       {{msg}}
+    </div>
+    {%endif%}
+   
+    
+    <h2 style="margin-left:10px;">Contact us</h2>
+
+    <hr class="w3-opacity">
+    <form action="/contact/" method="post">
+        {% csrf_token %}
+        <div class="w3-section">
+            <label>Subject</label>
+            <input class="w3-input w3-border" type="text" name="subject" required>
+        </div>
+        <div class="w3-section">
+            <label>Email</label>
+            <input class="w3-input w3-border" type="text" name="email" required>
+        </div>
+        <div class="w3-section">
+            <label>Message</label>
+            <input class="w3-input w3-border" type="text" name="body" required>
+        </div>
+        <button type="submit" class="w3-button w3-black"><i class="fa fa-paper-plane w3-margin-right"></i>Send Message</button>
+    </form>
+    <div class="w3-row-padding w3-center w3-padding-24" style="margin:0 -16px">
+        <div class="w3-third w3-dark-grey">
+            <p><i class="fa fa-envelope w3-xxlarge w3-text-light-grey"></i></p>
+            <p>contact@roomrental.com.np</p>
+        </div>
+        <div class="w3-third w3-teal">
+            <p><i class="fa fa-map-marker w3-xxlarge w3-text-light-grey"></i></p>
+            <p>Butwal, Nepal</p>
+        </div>
+        <div class="w3-third w3-dark-grey">
+            <p><i class="fa fa-phone w3-xxlarge w3-text-light-grey"></i></p>
+            <p>+977 9866137416</p>
+        </div>
+    </div>
+    <div class="w3-panel w3-large w3-center">
+
+    </div>
+</div>
+{% endblock %}

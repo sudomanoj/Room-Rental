@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="container">
+    {% if recommended_rooms %}
+                <h5 class="my-4" style="text-align: center;"> Apartment Recommendation For You</h5>
+                <div class="w3-row-padding">
+                                {% for i in recommended_rooms %}
+                                <div class="w3-third w3-container w3-margin-bottom">
+                                    <div class="card" style=" background-color: #e9ecef;">
+                                        <img src='{{i.img.url}}' class="w3-hover-opacity" style="height: 250px; width: 100%" alt="...">
+                                        <div class="card-body">
+                                            <p>Room {{forloop.counter}}</p>
+                                            <p>Rs {{i.cost}}</p>
+                                            <p>{{i.district}}</p>
+                                            <div class="text-center">
+                                            <form action="/descr"  style="margin-bottom: 5px;" class='my-2'>
+                                                <button name="id" value="{{i.room_id}}" class="btn btn-sm w3-blue"> Quick view</button>
+                                            </form>
+                                        </div> 
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+                </div>
+                {% endif %}
+</div>
+{% endblock body %}

@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block style %}
+<style>
+    .row {
+        padding: 2em;
+    }
+
+    input[type=text] {
+        margin: unset!important;
+    }
+
+    button[type="submit"] {
+        border-radius: 0;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="w3-container">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <h1><b>Search</b></h1>
+             {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                      <strong>{{ message }}</strong> 
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="col-md-12 col-sm-12" >
+            <div class="input-group my-group"   > 
+                <form class="form-inline" style="width: 100%;"  method="GET" action="/search" >
+                    <input type="text" class="form-control " style="width: 55%;"   name="q" placeholder="Search here..." {%if q%}value="{{q}}"{%endif%} />
+                    <select name="type"  style="width: 30%;" class=" col-md-3 col-sm-6 selectpicker form-control" data-live-search="true">
+                        <option value="House">House</option>
+                        <option value="Apartment">Apartment</option>
+                    </select> 
+                    <span class="input-group-btn" style="width: 15%;">
+                        <button style="width: 100%;border-radius: 4px;" class="btn btn-primary ml-2" type="submit">Search</button>
+                    </span>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <div class="w3-section w3-bottombar w3-padding-16">
+                <span class="w3-margin-right">Filter:</span> 
+                <button class="w3-button w3-black">ALL</button>
+                <button class="w3-button w3-white"><i class="fa fa-diamond w3-margin-right"></i>Type</button>
+                <button class="w3-button w3-white w3-hide-small"><i class="fa fa-dollar w3-margin-right"></i>Price</button>
+                <button class="w3-button w3-white w3-hide-small"><i class="fa fa-map-pin w3-margin-right"></i>Location</button>
+            </div>
+        </div>
+    {% if result.0 %}
+   
+    <div class="w3-container w3-home-container" style="width: 100%">
+         <h5 class="my-4"> Your search result</h5>
+        <div class="col carousel slide my-3" data-ride="carousel">
+            <div class="carousel-inner no-padding">
+                <div class="carousel-item active">
+                    {% for i in result.0%}
+                    <div class="w3-third w3-container w3-margin-bottom">
+                        <div class="card" style=" background-color: #e9ecef;">
+                            <img src='{{i.img.url}}' class="w3-hover-opacity" style="height: 250px; width: 100%" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <span id="pricepr{{i.id}}">
+                                        <p>
+                                            <b>
+                                        <h3>NPR{{i.cost}}</h3> </b></p>
+                                    </span>
+                                </h5>
+                                <p class="card-text">{{i.desc|slice:"0:20"}}...</p>
+                                <p>{{i.location}}, {{i.city}}, {{i.state}}</p>
+                                {%if type == 'House' %}
+                                <form action="/descr"  style="margin-bottom: 5px;">
+                                    <button name="id" value="{{i.house_id}}" style="background-color: grey"> Quick view</button>
+                                </form>
+                                {%else%}
+                                <form action="/descr"  style="margin-bottom: 5px;">
+                                    <button name="id" value="{{i.room_id}}" style="background-color: grey"> Quick view</button>
+                                </form>
+                                {%endif%}
+                            </div>
+                        </div>
+                    </div>
+                    {% if forloop.counter|divisibleby:3 and forloop.counter > 0 and forloop.counter < result.1 %}
+                </div>
+                <div class="carousel-item">
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <center>
+                
+                <a href="#">1...{{result.1}}</a>
+                
+            </center>
+        </div>
+        
+    </div>
+    {%else%}
+        <h3>Search your query</h3>
+       
+    {%endif%}
+</div>
+</div>
+{% endblock %}
