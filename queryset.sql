@@ -1,0 +1,20 @@
+INSERT INTO user_room (room_id, dimention, district, city, state, cost, bedrooms, kitchen, hall, balcany, "desc", ac, booked, img, date, user_email_id)
+VALUES
+    (uuid_generate_v4(), '10 10', 'Kaski', 'Pokhara', 'Gandaki Province', 15000, 4, TRUE, TRUE, TRUE, 'Suitable Apartment For Sweet Family', TRUE, FALSE, 'room_id/room1.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '12 13', 'Rupandehi', 'Butwal', 'Lumbini Pradesh', 22000, 4, TRUE, TRUE, TRUE, 'Best Apartment For You', FALSE, FALSE, 'room_id/room2.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '12 13', 'Kathmandu', 'Kathmandu', 'Bagmati Pradesh', 31000, 4, TRUE, TRUE, TRUE, 'Suitable Apartment For Sweet Family', TRUE, FALSE, 'room_id/room3.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '13 11', 'Lalitpur', 'Lalitpur', 'Bagmati Pradesh', 18000, 4, TRUE, TRUE, TRUE, 'Best Apartment For You', FALSE, FALSE, 'room_id/room4.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '12 13', 'Bhaktapur', 'Bhaktapur', 'Bagmati Pradesh', 25000, 4, TRUE, TRUE, TRUE, 'Suitable Apartment For Sweet Family', FALSE, FALSE, 'room_id/room5.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '13 11', 'Kaski', 'Pokhara', 'Gandaki Pradesh', 32000, 4, TRUE, TRUE, TRUE, 'Best Apartment For You', TRUE, FALSE, 'room_id/room6.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '12 13', 'Chitwan', 'Bharatpur', 'Bagmati Pradesh', 27000, 4, TRUE, TRUE, TRUE, 'Your space your rule', FALSE, FALSE, 'room_id/room7.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '13 11', 'Biratnagar', 'Biratnagar', 'Province No. 1', 14000, 4, TRUE, TRUE, TRUE, 'Best Apartment For You', TRUE, FALSE, 'room_id/room8.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '13 11', 'Birgunj', 'Birgunj', 'Province No. 2', 33000, 4, TRUE, TRUE, TRUE, 'Suitable Apartment For Sweet Family', TRUE, FALSE, 'room_id/room9.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '12 13', 'Rupandehi', 'Butwal', 'Lumbini Pradesh', 29000, 4, TRUE, TRUE, TRUE, 'Best Apartment For You', FALSE, FALSE, 'room_id/room10.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '13 11', 'Hetauda', 'Hetauda', 'Bagmati Pradesh', 12000, 4, TRUE, TRUE, TRUE, 'Suitable Apartment For Sweet Family', TRUE, FALSE, 'room_id/room11.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '12 13', 'Janakpur', 'Janakpur', 'Province No. 2', 26000, 4, TRUE, TRUE, TRUE, 'Best Apartment For You', FALSE, FALSE, 'room_id/room12.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '12 12', 'Janakpur', 'Janakpur', 'Province No. 2', 17000, 4, TRUE, TRUE, TRUE, 'Suitable Apartment For Sweet Family', FALSE, FALSE, 'room_id/room13.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '12 13', 'Itahari', 'Itahari', 'Province No. 1', 35000, 4, TRUE, TRUE, TRUE, 'Best Apartment For You', TRUE, FALSE, 'room_id/room14.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '12 12', 'Nepalganj', 'Nepalganj', 'Sudurpashchim Pradesh', 20000, 4, TRUE, TRUE, TRUE, 'Best Apartment For You', FALSE, FALSE, 'room_id/room15.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '8 10', 'Dang', 'Ghorahi', 'Lumbini Pradesh', 39000, 4, TRUE, TRUE, TRUE, 'Suitable Apartment For Sweet Family', TRUE, FALSE, 'room_id/room16.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '12 13', 'Saptari', 'Rajbiraj', 'Province No. 2', 30000, 4, TRUE, TRUE, TRUE, 'Best Apartment For You', TRUE, FALSE, 'room_id/room17.jpg', '2024-01-04', 'randomtestmail3@gmail.com'),
+    (uuid_generate_v4(), '12 12', 'Mahendranagar', 'Mahendranagar', 'Sudurpashchim Pradesh', 28000, 4, TRUE, TRUE, TRUE, 'Best Apartment For You', TRUE, FALSE, 'room_id/room18.jpg', '2024-01-04', 'randomtestmail3@gmail.com');

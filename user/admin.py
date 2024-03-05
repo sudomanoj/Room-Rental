@@ -23,9 +23,13 @@ class RoomAdmin(admin.ModelAdmin):
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
     list_display = ['customer', 'house', 'room', 'booked', 'date']
+    
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ['subject', 'email', 'body']
 
 # admin.site.register(User)
 # admin.site.register(House)
 # admin.site.register(Room)
-admin.site.register(Contact)
+# admin.site.register(Contact)
 # admin.site.register(Booking)

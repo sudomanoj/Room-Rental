@@ -14,15 +14,15 @@
     {%endif%}
     </div>
     
-    <form class="modal-content animate" action="/register" method="post">
+    <form class="modal-content animate" action="{% url "register" %}" method="post">
         <div class="container">
             {% csrf_token %}
             <label for="name"><b>Name</b></label>
             <input type="text" placeholder="Enter Name" name="name" required>
             <label for="email"><b>Email</b></label>
             <input type="text" placeholder="user@host.com" name="email" required>
-            <label for="location"><b>Location</b></label>
-            <input type="text" placeholder="Rupandehi" name="location" required>
+            <label for="district"><b>District</b></label>
+            <input type="text" placeholder="Rupandehi" name="district" required>
             <label for="city"><b>City</b></label>
             <input type="text" placeholder="Butwal" name="city" required>
             <label for="state"><b>State</b></label>

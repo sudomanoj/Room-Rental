@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    <div class="row">
+    {% comment %} <div class="row">
         <div class="col-md-12 col-sm-12">
             <div class="w3-section w3-bottombar w3-padding-16">
                 <span class="w3-margin-right">Filter:</span> 
@@ -55,7 +55,7 @@
                 <button class="w3-button w3-white w3-hide-small"><i class="fa fa-dollar w3-margin-right"></i>Price</button>
                 <button class="w3-button w3-white w3-hide-small"><i class="fa fa-map-pin w3-margin-right"></i>Location</button>
             </div>
-        </div>
+        </div> {% endcomment %}
     {% if result.0 %}
    
     <div class="w3-container w3-home-container" style="width: 100%">
@@ -108,6 +108,7 @@
         <h3>Search your query</h3>
        
     {%endif%}
+    <div style="min-height:50vh"></div>
 </div>
 </div>
 {% endblock %}

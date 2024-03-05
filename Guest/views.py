@@ -7,12 +7,17 @@ from django.template import loader
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
+from Guest.tokens import account_activation_token
 from django.core.paginator import Paginator
 import requests
 import json
 import uuid
 from user.models import User, Room, House, Contact, Booking
+from Guest.forms import PasswordResetForm, CustomSetPasswordForm
 from .utils import content_based_house_recommendation, content_based_room_recommendation
 from datetime import datetime
 import re
@@ -27,7 +32,7 @@ def index(request):
         # n = len(room)
         # nslide = n // 3 + (n % 3 > 0)
         # rooms = [room, range(1, nslide), n]
-        rooms_paginated = Paginator(room, 3)
+        rooms_paginated = Paginator(room, 6)
         rooms_page_number = request.GET.get('rooms_page')
         rooms = rooms_paginated.get_page(rooms_page_number)
         context.update({'room': rooms})
@@ -37,7 +42,7 @@ def index(request):
         # n = len(house)
         # nslide = n // 3 + (n % 3 > 0)
         # houses = [house, range(1, nslide), n]
-        houses_paginated = Paginator(house, 3)
+        houses_paginated = Paginator(house, 6)
         houses_page_number = request.GET.get('houses_page')
         houses = houses_paginated.get_page(houses_page_number)
         context.update({'house': houses})
@@ -135,7 +140,7 @@ def contact(request):
         
         contact = Contact(subject=subject, email=email, body=body)
         contact.save()
-        context.update({'msg': 'msg send to admin'})
+        context.update({'msg': 'Message send to admin'})
 
     return HttpResponse(template.render(context, request))
 
@@ -158,18 +163,63 @@ def descr(request):
 
     return HttpResponse(template.render(context, request))
 
+
+def activate(request, uidb64, token):
+    try:
+        user_id = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=user_id)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and account_activation_token.check_token(user, token):
+        user.active = True
+        user.save()
+        messages.success(request, 'Your account has been verified successfully!')
+        return redirect('login')
+    else:
+        messages.error(request, 'Activation link is invalid.')
+        return redirect('home')
+
+
+
+
+def activateEmail(request, user, to_email):
+    mail_subject = 'Activate your user account'
+    message = render_to_string("account_activate_template.html", 
+                               {
+                                   'user': user.email,
+                                   'domain': get_current_site(request).domain,
+                                   'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                                   'token': account_activation_token.make_token(user),
+                                   'protocol': 'https' if request.is_secure() else 'http',
+                               }
+                           )
+    email = EmailMessage(mail_subject, message, to=[to_email])
+    if email.send():
+        messages.success(request, f'{user.name} Your account created successfully! Check your email for verification process.')
+    else:
+        messages.error(request, f'Problem sending email to {email}, please try again later.')
+        
+        
 def register(request):
     if request.method == 'GET':
         return render(request, 'register.html', {'msg': ''})
 
     name = request.POST.get('name', '')
     email = request.POST.get('email', '')
-    location = request.POST.get('location', '')
+    district = request.POST.get('district', '')
     city = request.POST.get('city', '')
     state = request.POST.get('state', '')
     phone = request.POST.get('phone', '')
     pas = request.POST.get('pass', '')
     cpas = request.POST.get('cpass', '')
+    
+    name_regex = '^[a-zA-Z\s]{2,}$'
+    if not re.search(name_regex, name):
+        template = loader.get_template('register.html')
+        context = {'msg': 'invalid name'}
+        return HttpResponse(template.render(context, request))
+
 
     regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
     if not re.search(regex, email):
@@ -187,24 +237,98 @@ def register(request):
         context = {'msg': 'password did not match'}
         return HttpResponse(template.render(context, request))
 
-    already = User.objects.filter(email=email)
-    if bool(already):
-        template = loader.get_template('register.html')
-        context = {'msg': 'email already registered'}
+    # already = User.objects.filter(email=email)
+    # if bool(already):
+    #     template = loader.get_template('register.html')
+    #     context = {'msg': 'email already registered'}
         return HttpResponse(template.render(context, request))
 
     user = User.objects.create_user(
         name=name,
         email=email,
-        location=location,
+        district=district,
         city=city,
         state=state,
         number=phone,
         password=pas,
     )
+    user.active = False
     user.save()
-    login(request, user)
-    return redirect("/profile/")
+    activateEmail(request, user, user.email)
+    messages.success(request, 'Account created successfully, check your email for verification process!!')
+    # login(request, user)
+    return redirect("login")
+
+def password_reset_request(request):
+    form = PasswordResetForm()
+    if request.method == 'POST':
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            user_email = form.cleaned_data['email']
+            associated_user = User.objects.filter(Q(email=user_email)).first()
+            if associated_user:
+                mail_subject = 'Password reset request'
+                message = render_to_string("password_reset_template.html", 
+                               {
+                                   'user': associated_user,
+                                   'domain': get_current_site(request).domain,
+                                   'uid': urlsafe_base64_encode(force_bytes(associated_user.pk)),
+                                   'token': account_activation_token.make_token(associated_user),
+                                   'protocol': 'https' if request.is_secure() else 'http',
+                                   }
+                               )
+                email = EmailMessage(mail_subject, message, to=[associated_user.email])
+                if email.send():
+                    messages.success(request, f'{associated_user} Password reset link has been sent to your email!!')
+                    return redirect('passwordresetrequest')
+                else:
+                    messages.error(request, 'Problem while sending email!')
+
+            else:
+                return redirect('home')
+    return render(request, 'password_reset.html', {'form':form})
+
+def passwordResetConfirm(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+        print(user.email)
+    except:
+        user = None
+    
+    if user is not None and account_activation_token.check_token(user, token):
+        if request.method == 'POST':
+            form = CustomSetPasswordForm(user, request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Password changed successfully!')
+            else:
+                for error in list(form.errors.values()):
+                    messages.error(request, error)
+        else:
+            form = CustomSetPasswordForm(user)
+        return render(request, 'password_reset_confirm.html', {'form':form})
+    else:
+        messages.error(request, 'Activation link is invalid!')
+    messages.error(request, 'Something went wrong, redirecting back to homepage')
+    return redirect('home')
+
+
+@login_required    
+def password_change(request):
+    user = request.user
+    if request.method == 'POST':
+        form = CustomSetPasswordForm(user, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Password changed successfully!')
+            return redirect('login')
+        else:
+            for error in list(form.errors.values()):
+                messages.error(request, error)
+    form = CustomSetPasswordForm(user)
+    return render(request, 'password_change_form.html', {'form':form})
+
 
 @login_required(login_url='/login')
 def profile(request):
@@ -266,6 +390,12 @@ def post(request):
             ac = request.POST.get('AC', 'No') == 'Yes'
             desc = request.POST.get('desc', '').upper()
             img = request.FILES.get('img', None)
+            
+            dimention_regex = '^(1[0-5]|[5-9])\s(1[0-5]|[5-9])$'
+            if not re.search(dimention_regex, dimention):
+                template = loader.get_template('post.html')
+                context = {'msg': 'invalid dimension Please enter in format like 10 10'}
+                return HttpResponse(template.render(context, request))
 
             user_obj = User.objects.filter(email=request.user.email)[0]
             bedroom = int(bedroom)

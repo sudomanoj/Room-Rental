@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from django.contrib.messages import constants as messages
+from .custom_hashers import SHA256PasswordHasher
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -76,12 +77,12 @@ WSGI_APPLICATION = 'Guest.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # Mysql Database
 # DATABASES = {
@@ -99,16 +100,16 @@ DATABASES = {
 # }
 
 # Postgres Database
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'roomrental1',
-#         'USER': 'admin',
-#         'PASSWORD': 'admin',
-#         'HOST': 'localhost',  # Set to the host where your PostgreSQL server is running
-#         'PORT': '5432',      # Set to the port on which your PostgreSQL server is listening
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'roomrental1',
+        'USER': 'admin',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',  # Set to the host where your PostgreSQL server is running
+        'PORT': '5432',      # Set to the port on which your PostgreSQL server is listening
+    }
+}
 
 
 
@@ -183,6 +184,15 @@ AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
 
 )
+
+
+# PASSWORD_HASHERS = [
+#     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+#     "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
+#     "django.contrib.auth.hashers.Argon2PasswordHasher",
+#     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
+#     "django.contrib.auth.hashers.ScryptPasswordHasher",
+# ]
 
 JAZZMIN_SETTINGS = {
     "site_title": "My Admin",
